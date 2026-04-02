@@ -69,65 +69,6 @@ When a user sets a savings goal:
 | Stock Prices | `yfinance` (Python library) — unofficial but actively maintained, free, good for learning projects. Note: not for production use as it can break if Yahoo changes their site structure. |
 | Crypto Prices | CoinGecko API — fully free, no API key required for basic use, more stable than yfinance for crypto |
 
----
-
-## Data Model
-USER (
-    user_id: SERIAL PK,
-    full_name: TEXT NOT NULL,
-    email: TEXT UNIQUE NOT NULL,
-    password_hash: TEXT NOT NULL,
-    cash_balance: NUMERIC,
-    created_at: DATE,
-)
-
-INCOME (
-    income_id: SERIAL PK,
-    income_type: TEXT,              -- CHECK: salary, hourly
-    amount: NUMERIC,
-    frequency: TEXT,                -- CHECK: weekly, biweekly, monthly
-    next_pay_date: DATE,
-    user_id: INT FK
-)
-
-HOLDINGS (
-    holding_id: SERIAL PK,
-    ticker: TEXT NOT NULL,
-    quantity: NUMERIC,
-    holding_type: TEXT,             -- CHECK: stock, crypto
-    user_id: INT FK
-)
-
-EXPENSES (
-    expense_id: SERIAL PK,
-    name: TEXT NOT NULL,
-    is_recurring: BOOLEAN NOT NULL,
-    frequency: TEXT NULL,           -- CHECK: weekly, biweekly, monthly | null if one-time
-    next_due_date: DATE NULL,       -- null if one-time
-    amount: NUMERIC,
-    user_id: INT FK
-)
-
-GOAL (
-    goal_id: SERIAL PK,
-    name: TEXT NOT NULL,
-    target_amount: NUMERIC,
-    start_date: DATE,
-    target_date: DATE,
-    contribution_amount: NUMERIC,   -- amount per period (stored)
-    contributed_amount: NUMERIC,    -- what user actually put away (stored)
-    frequency: TEXT,                -- CHECK: weekly, biweekly, monthly
-    user_id: INT FK
-)
-
----
-
-## API Routes
-⚠️ TODO: Define endpoints
-
-Think about: which routes require authentication and which don't?
-
----
 
 ## Getting Started
 

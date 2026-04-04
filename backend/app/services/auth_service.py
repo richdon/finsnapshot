@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from config import AuthConfig
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -19,7 +19,7 @@ class AuthService:
         encode = {
             "sub": email,
             "id": user_id,
-            "exp": datetime.now() + timedelta(minutes=self.config.jwt_expiration)
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=self.config.jwt_expiration)
         }
         return jwt.encode(encode, self.config.secret_key, algorithm=self.config.jwt_algorithm)
     
@@ -34,6 +34,6 @@ class AuthService:
         try:
             payload = jwt.decode(token, self.config.secret_key, algorithms=[self.config.jwt_algorithm])
             exp = payload.get("exp")
-            return datetime.now() > datetime.fromtimestamp(exp)
+            return datetime.now(timezone.utc) > datetime.fromtimestamp(exp, tz=timezone.utc)
         except JWTError:
             return True

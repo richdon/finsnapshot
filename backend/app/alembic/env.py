@@ -7,8 +7,8 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 from database.db_models import Base
 from database.db_models import User, Income, Holding, Expense, Goal
+from app.config import DatabaseConfig
 # Load .env from project root
-load_dotenv()
 
 # Add app to path for absolute imports
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -22,9 +22,8 @@ target_metadata = Base.metadata
 
 print(f"DEBUG TABLES: {Base.metadata.tables}", file=sys.stderr)
 
-db_url = os.getenv("DATABASE_URL")
-print(f"DEBUG URL: {db_url}", file=sys.stderr)
-config.set_main_option("sqlalchemy.url", db_url)
+print(f"DEBUG URL: {DatabaseConfig.db_url}", file=sys.stderr)
+config.set_main_option("sqlalchemy.url", DatabaseConfig.db_url)
 
 
 def run_migrations_offline() -> None:
